@@ -41,61 +41,60 @@ iqtree.sh <MAFFT_OUTPUT>
 ### EXTRACTING RNA MODIFICATION MACHINERY (RMM) PROTEIN EXPRESSION FROM RNA SEQ DATASETS 
 Initially obtained list of Main RNA Writer Proteins and we added non-catalytic subunits, readers, erasers and other tRNA writer proteins from V de Crécy-Lagard et al - 2019. Therefore, we have 146 RMMs at the end. 
 
-
-
 #### GTEx 
-Extract TPM values for the RNA modification enzymes from the GTEx TPM table
-GTEx TPM table contains expression information for human genes. Previously we took average of tissues that has more than one section (Adipose, Artery, Brain, Cerebellum, Cervix, Colon, Esophagus, Heart, Skin). We also removed Cells - EBV-transformed lymphocytes/	Cells - Transformed fibroblasts / Whole Blood expression values from our table because we are interested in tissues and also Whole Blood is an outlier in the GTEx dataset. We call this file GTEx_tissues_modified
+Extract TPM values for the RNA modification enzymes from the GTEx TPM dataset
+```
+Rscript gtex_manipulation.R <GTEX.Expression.File> <ENSEMBL_GeneSymbol_Class.File>
+
+# Example: Rscript gtex_manipulation.R GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct human_id_symbol_class.tsv
+```
+
+#### ENCODE 
+Extract TPM values for the RNA modification enzymes from the ENCODE TPM dataset
+```
+Rscript gtex_manipulation.R <ENCODE.Expression.File> <ENSEMBL_GeneSymbol_Class.File>
+
+# Example: Rscript encode_manipulation.R mm65.long.gene.with.expr.cshl.tsv mouse_id_symbol_class.tsv
+```
+
+### GTEx Tissue-Wide Expression Analysis
+Scripts for tissue-specificity analysis and plots 
 
 ``` 
-extract_modomics.TPM.sh  <List of ENSEMBL IDs>  <TPM table>
+Rscript gtex_tissuewide.R  <TPM table>
 
-# Example: gtex_extract_modomics.sh ENSEMBL_IDs GTEx_tissues_modified
+# Example: Rscript gtex_tissuewide.R RMLP.GTEX.TissueAveraged.TPM.tsv
 ``` 
 
-#### Human Protein Atlas (HPA)
-##### Reformat HPA into the form of gTEX
-``` 
-python make_tbl.py <OriginalHPAFile> > <OriginalHPAFile>.reformatted.tsv
+### ENCODE Tissue-Wide Expression Analysis
+Scripts for tissue-specificity analysis and plots 
 
-# Example: python make_tbl.py Original_HPA_TPM.tsv > Original_HPA_TPM.tsv.reformatted.tsv
 ``` 
-Extract TPM values for the RNA modification enzymes from the GTEx TPM table
+Rscript encode_tissuewide.R  <TPM table>
 
-##### Extract TPM values from the reformatted table
-``` 
-extract_modomics.TPM.sh  <List of ENSEMBL IDs>  <TPM table>
-
-# Example: extract_modomics.TPM.sh ENSEMBL_IDs Original_HPA_TPM.tsv.reformatted.tsv
+# Example: Rscript encode_tissuewide.R RMLP.encode.TPM.brainav.tsv
 ``` 
 
 
-#### Encode Mouse 
-We have modified the mm65.long.gene.with.expr.cshl.tsv file to contain only adult tissues with longPolyA sequencing remove liver total. Additionally, we took average of Frontal Lobe and Cortex as "Brain". We named it ENCODE_Adult_TPM
-##### Extract TPM values from the Encode expression table
+### Data similarity analysis between GTEx (Human) and ENCODE (Mouse)
+Scripts for Pearson correlation analysis between two datasets
 ``` 
-extract_modomics.TPM.sh  <List of ENSEMBL IDs>  <TPM table>
+Rscript gtex_vs_encode_similarity.R  <GTEX data> <ENCODE data> 
 
-# Example: extract_modomics.TPM.sh ensmus_id ENCODE_Adult_TPM.tsv
-``` 
-
-### TISSUE SPECIFICITY PLOTS
-Use log trasnformed TPM files for this
-MASS library is required
-``` 
-Rscript tissuespecificity.R  <Log transformed TPM table>
-
-# Example: Rscript tissuespecificity.R ENCODE_Adult_TPM.tsv.modomics.withheader.renamed.sorted.LOG.tsv
+# Example: Rscript gtex_vs_encode_similarity.R RMLP.GTEX.TissueAveraged.TPM.tsv RMLP.encode.TPM.brainav.tsv
 ``` 
 
-### HEATMAP AND PCA PLOTS 
-Use TPM files for this
-Superheat library is required
-``` 
-Rscript heatmap_PCA_expression.R  <TPM table>
 
-# Example: Rscript heatmap_PCA_expression.R ENCODE_Adult_TPM.tsv.modomics.withheader.renamed.tsv
-``` 
+
+
+
+
+
+
+
+
+
+
 
 ## PART3: EXPRESSION ANALYSIS WITH AMNIOTE AND PRIMATE SPECIES
 ### Extracting RNA modification enzymes
