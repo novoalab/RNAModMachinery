@@ -1,17 +1,17 @@
-#Comprehensive gene expression analyses of the RNA modification machinery reveal tissue-specific and cancer-specific signatures
-Scripts used to extract curated lists of RNA modification enzymes and assess their tissue-specificity across multiple species and tissues
+# RNA Modification Machinery
+Scripts used to extract curated lists of RNA modification enzymes and assess their tissue-specificity across multiple species and tissues, as well as cancer and normal tissues
 
 ## PART1: Search and extract sets of RNA modification ezymes in selected species across the tree of life
 
 ### FINDING RNA MODIFICATION ENZYMES in a specific SPECIES
 
 ``` 
-find_RNAmodenzymes_in_species.sh < pfam_hmm> <fasta_reference_proteome> 
+find_homologs.sh <pfam_hmm> <fasta_reference_proteome> 
 
-# Example: find_RNAmodenzymes_in_species.sh PFAM1.hmm Homo_sapiens
+# Example: find_homologs.sh A_deamin.hmm.txt Saccharomyces_cerevisiae.fasta
 ``` 
 - This script takes pfam profile as an input amd fasta reference proteome
-- Output will be proteins that have the domain, e.g. PFAM1.Homo_sapiens
+- Output will be proteins that have similiar functional domains, e.g. A_deamin.hmm.txtSaccharomyces_cerevisiae.fasta
 - Manual curation is performed to select candidates (based on literature, etc)
 
 ### ALIGNING THE ORTHOLOG PROTEINS AND BUILDING PHYLOGENETIC TREE FOR EACH GROUP OF ENZYMES
@@ -38,7 +38,10 @@ iqtree.sh <MAFFT_OUTPUT>
 
 ## PART2: EXPRESSION ANALYSIS WITH HUMAN AND MOUSE DATASETS
 
-### EXTRACTING MODOMICS FROM RNA SEQUENCING DATASETS 
+### EXTRACTING RNA MODIFICATION MACHINERY (RMM) PROTEIN EXPRESSION FROM RNA SEQ DATASETS 
+Initially obtained list of Main RNA Writer Proteins and we added non-catalytic subunits, readers, erasers and other tRNA writer proteins from V de Crécy-Lagard et al - 2019. Therefore, we have 146 RMMs at the end. 
+
+
 
 #### GTEx 
 Extract TPM values for the RNA modification enzymes from the GTEx TPM table
