@@ -84,68 +84,54 @@ Rscript gtex_vs_encode_similarity.R  <GTEX data> <ENCODE data>
 # Example: Rscript gtex_vs_encode_similarity.R RMLP.GTEX.TissueAveraged.TPM.tsv RMLP.encode.TPM.brainav.tsv
 ``` 
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## PART3: EXPRESSION ANALYSIS WITH AMNIOTE AND PRIMATE SPECIES
-### Extracting RNA modification enzymes
-Use Normalized RPKM Constitutive Exons tables for this
-``` 
-extract_modomics.RPKM.sh  <List of ENSEMBL IDs>  <RPKM table>
-
-# Example: extract_modomics.RPKM.sh NormalizedRPKM_ConstitutiveExons_Primate1to1Orthologues.txt.forR
+### Analysis for the Amniote Orthologs
 
 ``` 
-### PCA for Amniotes
-Use Normalized RPKM Constitutive Exons Table with row names are replaced with Gene Names instead of ENSEMBL ID
+Rscript kaessman.amniote.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.File>
+
+# Example: Rscript kaessman.amniote.R NormalizedRPKM_ConstitutiveExons_Amniote1to1Orthologues.txt human_id_symbol_class.tsv
 ``` 
-Rscript PCA_Amniote.R  <RPKM table>
 
-# Example: Rscript PCA_Amniote.R  Amniote_RPKM_GeneNames
-
-
+### Analysis for the Primate Orthologs
 ``` 
-### PCA for Primates
-Use Normalized RPKM Constitutive Exons Table with row names are replaced with Gene Names instead of ENSEMBL ID
-``` 
-Rscript PCA_Primate.R  <RPKM table>
+Rscript kaessman.primate.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.File>
 
-# Example: Rscript PCA_Primate.R  Primate_RPKM_GeneNames
-
+# Example: Rscript kaessman.primate.R NormalizedRPKM_ConstitutiveExons_Primate1to1Orthologues.txt human_id_symbol_class.tsv
 ``` 
 
 
 ## PART4: EXPRESSION ANALYSIS IN SPERMATOGENESIS
-### Within groups sum of squares (WSS) determining number of clusters 
-Use log( Average of Normalized Expression in the cluster + 1) table for mouse RNA modification enzymes with Average expression values of clusters according to the paper (Green et al. 2018) {GC1 (Spermatogonia), GC2-3(Prelep-Spermatocyte), GC4-8(Spermatocytes), GC9-11(Spermatids), GC12 (Elongating Spermatids)}
-cluster library is required
-``` 
-wss.R  <logExpressionTable>
+### Analysis
 
-# Example: Rscript wss.R scRNA_spermatogenesis.modomics.grouped
 ``` 
+Rscript spermatogenesis.R <spermatogenesis.expression.data> <ensembl_file>
 
-### K-means clustering the genes by their expression profile
-Use the same input as wss.R and use the best cluster number
-``` 
-kmeans.R  <logExpressionTable> <Clusters>
-
-# Example: Rscript kmeans.R scRNA_spermatogenesis.modomics.grouped 4
+# Example: Rscript spermatogenesis.R spermatogenesis_scRNA_averageexpression.tsv gene_hgnc_ensmus.tsv
 ``` 
 
-### Heatmap and PCA plots
-Use the heatmap input which contains the Genes in a certain order based on clusters
-``` 
-heatmap_PCA_spermatogenesis.R <logExpressionTableHeatmapInput>
+## PART5: TUMOR AND NORMAL TISSUE ANALYSIS
+### Extracting log(TPM+1) with reformatting
 
-# Example: Rscript heatmap_PCA_spermatogenesis.R heatmapinput_logexpression
 ``` 
+Rscript cancer_script1_datamanipulation.R <TCGA.GTEX.file> <ENSEMBL.file>
+
+Example:  Rscript cancer_script1_datamanipulation.R RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv human_id_symbol_class.tsv
+``` 
+
+### Boxplots of individual patients (log)
+``` 
+Rscript cancer_script2_boxplot.R <TCGA.GTEX.file>
+
+Example:  Rscript cancer_script2_boxplot.R TCGA_GTEX_FINAL.log2.without3cancer.tsv
+``` 
+
+### Heatmap plot of average TPM values
+
+``` 
+Rscript cancer_script3_mean_heatmap.R <TCGA.GTEX.file>
+
+Example:  cancer_script3_mean_heatmap.R TCGA_GTEX_FINAL.TPM.without3cancer.tsv
+``` 
+
+
