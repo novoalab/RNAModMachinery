@@ -10,7 +10,7 @@ find_homologs.sh <pfam_hmm> <fasta_reference_proteome>
 
 # Example: find_homologs.sh A_deamin.hmm.txt Saccharomyces_cerevisiae.fasta
 ``` 
-- This script takes pfam profile as an input amd fasta reference proteome
+- This script takes pfam profile as an input and fasta reference proteome
 - Output will be proteins that have similiar functional domains, e.g. A_deamin.hmm.txtSaccharomyces_cerevisiae.fasta
 - Manual curation is performed to select candidates (based on literature, etc)
 
@@ -20,7 +20,7 @@ find_homologs.sh <pfam_hmm> <fasta_reference_proteome>
 ```
 extract_fasta.sh <uniprot_ID_list>
 
-# Example: extract_fasta.sh uniprotIDlist.txt
+# Example: extract_fasta.sh A_deamin
 ```
 #### Align protein sequences with MAFFT align 
 ```
@@ -38,7 +38,7 @@ iqtree.sh <MAFFT_OUTPUT>
 
 ## PART2: EXPRESSION ANALYSIS WITH HUMAN AND MOUSE DATASETS
 
-### EXTRACTING RNA MODIFICATION MACHINERY (RMM) PROTEIN EXPRESSION FROM RNA SEQ DATASETS 
+### EXTRACTING RNA MODIFICATION MACHINERY PROTEIN (RMP) EXPRESSION FROM RNA SEQ DATASETS 
 Initially obtained list of Main RNA Writer Proteins and we added non-catalytic subunits, readers, erasers and other tRNA writer proteins from V de Crécy-Lagard et al - 2019. Therefore, we have 146 RMMs at the end. 
 
 #### GTEx 
@@ -52,7 +52,7 @@ Rscript gtex_manipulation.R <GTEX.Expression.File> <ENSEMBL_GeneSymbol_Class.Fil
 #### ENCODE 
 Extract TPM values for the RNA modification enzymes from the ENCODE TPM dataset
 ```
-Rscript gtex_manipulation.R <ENCODE.Expression.File> <ENSEMBL_GeneSymbol_Class.File>
+Rscript encode_manipulation.R <ENCODE.Expression.File> <ENSEMBL_GeneSymbol_Class.File>
 
 # Example: Rscript encode_manipulation.R mm65.long.gene.with.expr.cshl.tsv mouse_id_symbol_class.tsv
 ```
@@ -102,7 +102,7 @@ Rscript kaessman.primate.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.Fil
 
 
 ## PART4: EXPRESSION ANALYSIS IN SPERMATOGENESIS
-### Analysis
+### Analysis of single-cell RNA sequencing data (Green et al., 2019)
 
 ``` 
 Rscript spermatogenesis.R <spermatogenesis.expression.data> <ensembl_file>
@@ -126,12 +126,40 @@ Rscript cancer_script2_boxplot.R <TCGA.GTEX.file>
 Example:  Rscript cancer_script2_boxplot.R TCGA_GTEX_FINAL.log2.without3cancer.tsv
 ``` 
 
-### Heatmap plot of average TPM values
+### Heatmap plot of average log(TPM) values
 
 ``` 
 Rscript cancer_script3_mean_heatmap.R <TCGA.GTEX.file>
 
-Example:  cancer_script3_mean_heatmap.R TCGA_GTEX_FINAL.TPM.without3cancer.tsv
+Example:  Rscript cancer_script3_mean_heatmap.R TCGA_GTEX_FINAL.log2.without3cancer.tsv
 ``` 
 
+### Calculation of log2FC values for RMPs in tumor/normal pairs and plots
+
+``` 
+Rscript cancer_script4_log2FC.R <MedianLog Tumor and Normal TPM file>
+
+Example:  Rscript cancer_script4_log2FC.R medianlog_tumor_normal.tpm.tsv
+``` 
+
+### Calculation of Dysregulation scores in tumor/normal pairs and plots
+``` 
+Rscript cancer_script5_Dysregulation.R <MedianLog Tumor and Normal TPM file for all genes> <MedianLog Tumor and Normal TPM file for RMPs>
+
+Example:  Rscript cancer_script4_log2FC.R all_genes_logmedian_scatter_format.tsv medianlog_tumor_normal.tpm.tsv
+``` 
+
+### Plotting the expression values with stage information
+``` 
+Rscript cancer_script6_Stage.R <Gene Expression File> <ENSEMBL_GeneSymbol_Class.File> <clinical information> <Phenotype data>
+
+Example:  Rscript cancer_script6_stageexpression.R RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv human_id_symbol_class.tsv clinical.tsv TcgaTargetGTEX_phenotype.txt
+``` 
+
+### Plotting the survival curves
+``` 
+Rscript cancer_script7_SURVIVAL.R <Gene Expression File> <Survival data>
+
+Example: Rscript cancer_script7_SURVIVAL.R TCGA_GTEX_FINAL.log2.without3cancer.tsv TCGA_survival_data
+``` 
 
