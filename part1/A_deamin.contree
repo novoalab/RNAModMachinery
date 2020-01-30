@@ -1,0 +1,222 @@
+#NEXUS
+begin taxa;
+	dimensions ntax=120;
+	taxlabels
+	ADAD1_Chimpanzee
+	ADAD1_Green-anole
+	ADAD1_Human
+	ADAD1_Macaque
+	ADAD1_Mouse
+	ADAD1_Opossum
+	ADAD1_Platypus
+	ADAD1_Western-clawed-frog
+	ADAD1_Zebrafish
+	ADAD2_Chimpanzee
+	ADAD2_Green-anole
+	ADAD2_Human
+	ADAD2_Macaque
+	ADAD2_Mouse
+	ADAD2_Opossum
+	ADAD2_Platypus
+	ADAD2_Western-clawed-frog
+	ADAD2_Zebrafish
+	ADAR1_Chimpanzee
+	ADAR1_Fruit-fly
+	ADAR1_Green-anole
+	ADAR1_Human
+	ADAR1_Macaque
+	ADAR1_Mouse
+	ADAR1_Opossum
+	ADAR1_Placozoa
+	ADAR1_Platypus
+	ADAR1_Purple-sea-urchin
+	ADAR1_Sea-anemone
+	ADAR1_Sea-lancelet
+	ADAR1_Sea-vase
+	ADAR1_Sponge
+	ADAR1_Western-clawed-frog
+	ADAR1_Zebrafish
+	ADAR2_Chimpanzee
+	ADAR2_Fruit-fly
+	ADAR2_Green-anole
+	ADAR2_Human
+	ADAR2_Macaque
+	ADAR2_Mouse
+	ADAR2_Platypus
+	ADAR2_Purple-sea-urchin
+	ADAR2_Sea-anemone
+	ADAR2_Sea-lancelet
+	ADAR2_Sea-squirt
+	ADAR2_Sponge
+	ADAR2_Western-clawed-frog
+	ADAR2_Zebrafish
+	ADAR3_Chimpanzee
+	ADAR3_Green-anole
+	ADAR3_Human
+	ADAR3_Macaque
+	ADAR3_Mouse
+	ADAR3_Opossum
+	ADAR3_Platypus
+	ADAR3_Western-clawed-frog
+	ADAR3_Zebrafish
+	ADAT1_Amoeba
+	ADAT1_Budding-yeast
+	ADAT1_Chimpanzee
+	ADAT1_Ciliate
+	ADAT1_Dimorphic-fungus
+	ADAT1_Fruit-fly
+	ADAT1_Green-anole
+	ADAT1_Human
+	ADAT1_Macaque
+	ADAT1_Mouse
+	ADAT1_Opossum
+	ADAT1_Platypus
+	ADAT1_Protozoa
+	ADAT1_Purple-sea-urchin
+	ADAT1_Sea-anemone
+	ADAT1_Sea-lancelet
+	ADAT1_Sea-squirt
+	ADAT1_Sea-vase
+	ADAT1_Sponge
+	ADAT1_Western-clawed-frog
+	ADAT1_Zebrafish
+	ADAT2_Amoeba
+	ADAT2_Archaea
+	ADAT2_Bacteria
+	ADAT2_Budding-yeast
+	ADAT2_Chimpanzee
+	ADAT2_Ciliate
+	ADAT2_Dimorphic-fungus
+	ADAT2_Fruit-fly
+	ADAT2_Green-anole
+	ADAT2_Human
+	ADAT2_Macaque
+	ADAT2_Mouse
+	ADAT2_Opossum
+	ADAT2_Placozoa
+	ADAT2_Platypus
+	ADAT2_Protozoa
+	ADAT2_Purple-sea-urchin
+	ADAT2_Sea-squirt
+	ADAT2_Sponge
+	ADAT2_Western-clawed-frog
+	ADAT2_Zebrafish
+	ADAT3_Amoeba
+	ADAT3_Budding-yeast
+	ADAT3_Chimpanzee
+	ADAT3_Ciliate
+	ADAT3_Dimorphic-fungus
+	ADAT3_Fruit-fly
+	ADAT3_Green-anole
+	ADAT3_Human
+	ADAT3_Mouse
+	ADAT3_Opossum
+	ADAT3_Placozoa
+	ADAT3_Platypus
+	ADAT3_Protozoa
+	ADAT3_Purple-sea-urchin
+	ADAT3_Sea-anemone
+	ADAT3_Sea-lancelet
+	ADAT3_Sea-squirt
+	ADAT3_Sea-vase
+	ADAT3_Sponge
+	ADAT3_Western-clawed-frog
+	ADAT3_Zebrafish
+;
+end;
+
+begin trees;
+	tree tree_1 = [&R] (ADAD2_Zebrafish[&!color=#33adb8]:1.081367,((((ADAD2_Mouse[&!color=#33adb8]:0.226101,(ADAD2_Macaque[&!color=#33adb8]:0.045098,(ADAD2_Chimpanzee[&!color=#33adb8]:0.01365,ADAD2_Human[&!color=#33adb8]:0.002236)[&label=100,!color=#33adb8]:0.037316)[&label=100,!color=#33adb8]:0.271189)[&label=100,!color=#33adb8]:0.239532,ADAD2_Opossum[&!color=#33adb8]:0.486292)[&label=100,!color=#33adb8]:0.183246,ADAD2_Platypus[&!color=#33adb8]:0.360505)[&label=100,!color=#33adb8]:0.336581,ADAD2_Green-anole[&!color=#33adb8]:0.76005)[&label=98,!color=#33adb8]:0.15566,(((ADAD1_Zebrafish[&!color=#7fb83b]:0.640274,((((((ADAD1_Macaque[&!color=#7fb83b]:0.019157,(ADAD1_Chimpanzee[&!color=#7fb83b]:3.0E-6,ADAD1_Human[&!color=#7fb83b]:0.002114)[&label=100,!color=#7fb83b]:0.016548)[&label=100,!color=#7fb83b]:0.068056,ADAD1_Mouse[&!color=#7fb83b]:0.06413)[&label=100,!color=#7fb83b]:0.054997,ADAD1_Opossum[&!color=#7fb83b]:0.081802)[&label=99,!color=#7fb83b]:0.037552,ADAD1_Platypus[&!color=#7fb83b]:0.208596)[&label=100,!color=#7fb83b]:0.106014,ADAD1_Green-anole[&!color=#7fb83b]:0.187918)[&label=100,!color=#7fb83b]:0.111508,ADAD1_Western-clawed-frog[&!color=#7fb83b]:0.649406)[&label=100,!color=#7fb83b]:0.192178)[&label=100,!color=#7fb83b]:0.421827,(((((ADAR2_Sponge[&!color=#00ad20]:1.088737,((((((((((ADAR2_Chimpanzee[&!color=#9dab02]:3.0E-6,ADAR2_Human[&!color=#00ad20]:0.001527)[&label=100,!color=#00ad20]:0.00351,ADAR2_Macaque[&!color=#00ad20]:0.004169)[&label=100,!color=#00ad20]:0.021717,ADAR2_Mouse[&!color=#00ad20]:0.050818)[&label=100,!color=#00ad20]:0.140307,ADAR2_Platypus[&!color=#00ad20]:0.050707)[&label=99,!color=#00ad20]:0.040287,ADAR2_Green-anole[&!color=#00ad20]:0.068267)[&label=69,!color=#00ad20]:0.050612,ADAR2_Western-clawed-frog[&!color=#00ad20]:0.100064)[&label=69,!color=#00ad20]:0.059038,ADAR2_Zebrafish[&!color=#00ad20]:0.112779)[&label=100,!color=#00ad20]:0.214161,ADAR2_Sea-lancelet[&!color=#00ad20]:0.481017,((((ADAR3_Western-clawed-frog[&!color=#9dab02]:0.204511,ADAR3_Green-anole[&!color=#9dab02]:0.115534)[&label=85,!color=#9dab02]:0.034646,(ADAR3_Platypus[&!color=#9dab02]:0.120383,ADAR3_Opossum[&!color=#9dab02]:0.080042)[&label=74,!color=#9dab02]:0.01758)[&label=74,!color=#9dab02]:0.039982,((ADAR3_Macaque[&!color=#9dab02]:0.009499,(ADAR3_Human[&!color=#9dab02]:0.001601,ADAR3_Chimpanzee[&!color=#9dab02]:0.0036)[&label=100,!color=#9dab02]:0.006625)[&label=100,!color=#9dab02]:0.136769,ADAR3_Mouse[&!color=#9dab02]:0.081948)[&label=100,!color=#9dab02]:0.063662)[&label=100,!color=#9dab02]:0.114777,ADAR3_Zebrafish[&!color=#9dab02]:0.326389)[&label=100,!color=#9dab02]:0.443656,ADAR2_Purple-sea-urchin[&!color=#00ad20]:0.620604)[&label=83,!color=#00ad20]:0.188426,(ADAR1_Fruit-fly[&!color=#00ad20]:3.0E-6,ADAR2_Fruit-fly[&!color=#00ad20]:3.0E-6)[&label=100,!color=#00ad20]:0.885713)[&label=87,!color=#00ad20]:0.110778,(ADAR2_Sea-anemone[&!color=#00ad20]:0.711042,ADAR2_Sea-squirt[&!color=#00ad20]:0.894308)[&label=94,!color=#00ad20]:0.115923)[&label=99,!color=#00ad20]:0.262325)[&label=80,!color=#00ad20]:0.139085,((((((ADAT1_Sponge[&!color=#0015ff]:0.986128,((ADAT1_Sea-vase[&!color=#0015ff]:0.403825,ADAT1_Sea-squirt[&!color=#0015ff]:0.435404)[&label=100,!color=#0015ff]:0.670537,ADAT1_Fruit-fly[&!color=#0015ff]:1.20825)[&label=99,!color=#0015ff]:0.218144)[&label=78,!color=#0015ff]:0.145612,((ADAT1_Sea-anemone[&!color=#0015ff]:0.589085,ADAR1_Placozoa[&!color=#0015ff]:0.884588)[&label=98,!color=#0015ff]:0.285024,((ADAT1_Sea-lancelet[&!color=#0015ff]:0.763761,(ADAT1_Zebrafish[&!color=#0015ff]:0.623203,((((((ADAT1_Macaque[&!color=#0015ff]:0.02798,(ADAT1_Chimpanzee[&!color=#0015ff]:0.004626,ADAT1_Human[&!color=#0015ff]:0.009171)[&label=100,!color=#0015ff]:0.028846)[&label=100,!color=#0015ff]:0.060516,ADAT1_Mouse[&!color=#0015ff]:0.204392)[&label=100,!color=#0015ff]:0.229139,ADAT1_Opossum[&!color=#0015ff]:0.237714)[&label=95,!color=#0015ff]:0.069438,ADAT1_Platypus[&!color=#0015ff]:0.27638)[&label=100,!color=#0015ff]:0.10451,ADAT1_Green-anole[&!color=#0015ff]:0.74735)[&label=84,!color=#0015ff]:0.100347,ADAT1_Western-clawed-frog[&!color=#0015ff]:0.580095)[&label=100,!color=#0015ff]:0.161625)[&label=99,!color=#0015ff]:0.224329)[&label=99,!color=#0015ff]:0.147059,ADAT1_Purple-sea-urchin[&!color=#0015ff]:1.291617)[&label=53,!color=#0015ff]:0.061773)[&label=94,!color=#0015ff]:0.215119)[&label=82,!color=#0015ff]:0.114748,ADAT1_Amoeba[&!color=#0015ff]:1.214099)[&label=71,!color=#0015ff]:0.13365,ADAT1_Dimorphic-fungus[&!color=#0015ff]:0.922267)[&label=53,!color=#0015ff]:0.140474,ADAT1_Ciliate[&!color=#0015ff]:2.29699)[&label=74,!color=#0015ff]:0.326075,(ADAT1_Budding-yeast[&!color=#0015ff]:2.068398,ADAT1_Protozoa[&!color=#0015ff]:2.638539)[&label=71,!color=#0015ff]:0.375518)[&label=91,!color=#0015ff]:0.564918)[&label=74,!color=#000dff]:0.109987,((((((ADAT2_Sponge:0.920623,(((((ADAT2_Opossum:0.221658,(((ADAT2_Macaque:0.016994,ADAT2_Chimpanzee:3.0E-6)[&label=86]:0.008459,ADAT2_Human:3.0E-6)[&label=89]:0.038559,ADAT2_Mouse:0.161169)[&label=100]:0.070505)[&label=99]:0.087043,(ADAT2_Green-anole:0.433112,ADAT2_Western-clawed-frog:0.404306)[&label=68]:0.027191)[&label=79]:0.09345,(ADAT2_Platypus:0.17683,ADAT2_Zebrafish:0.43885)[&label=79]:0.058358)[&label=97]:0.284526,(ADAT2_Purple-sea-urchin:0.776885,ADAT2_Placozoa:1.033465)[&label=97]:0.330939)[&label=95]:0.170923,ADAT2_Sea-squirt:0.763108)[&label=98]:0.180965)[&label=97]:0.355594,((ADAT2_Fruit-fly:1.226484,ADAT2_Ciliate:1.359176)[&label=54]:0.15269,(ADAT2_Budding-yeast:1.059543,ADAT2_Dimorphic-fungus:0.732129)[&label=98]:0.362579)[&label=67]:0.135668)[&label=66]:0.165494,ADAT2_Amoeba:1.264429)[&label=94]:0.319428,ADAT2_Protozoa:0.998831)[&label=100]:0.983156,(ADAT2_Bacteria:1.031791,ADAT2_Archaea:2.578227)[&label=99]:0.555015)[&label=94]:0.277754,((((ADAT3_Sponge[&!color=#ff0011]:1.327779,(((ADAT3_Sea-anemone[&!color=#ff0011]:0.666225,(ADAT3_Sea-vase[&!color=#ff0011]:0.374634,ADAT3_Sea-squirt[&!color=#ff0011]:0.363213)[&label=100,!color=#ff0011]:0.819416)[&label=63,!color=#ff0011]:0.093634,(ADAT3_Fruit-fly[&!color=#ff0011]:1.51931,((ADAT3_Ciliate[&!color=#ff0011]:1.370502,(ADAT3_Budding-yeast[&!color=#ff0011]:1.740894,ADAT3_Protozoa[&!color=#ff0011]:1.777599)[&label=89,!color=#ff0011]:0.275517)[&label=75,!color=#ff0011]:0.243025,ADAT3_Amoeba[&!color=#ff0011]:1.279648)[&label=74,!color=#ff0011]:0.210199)[&label=87,!color=#ff0011]:0.249116)[&label=65,!color=#ff0011]:0.141288,((ADAT3_Placozoa[&!color=#ff0011]:0.755099,ADAT3_Dimorphic-fungus[&!color=#ff0011]:1.091773)[&label=86,!color=#ff0011]:0.147242,ADAT3_Purple-sea-urchin[&!color=#ff0011]:1.014979)[&label=77,!color=#ff0011]:0.19226)[&label=61,!color=#ff0011]:0.06033)[&label=95,!color=#ff0011]:0.200189,(((((ADAT3_Human[&!color=#ff0011]:3.0E-6,ADAT3_Chimpanzee[&!color=#ff0011]:0.007501)[&label=100,!color=#ff0011]:0.107099,ADAT3_Mouse[&!color=#ff0011]:0.167549)[&label=100,!color=#ff0011]:0.370549,(ADAT3_Platypus[&!color=#ff0011]:0.268314,ADAT3_Opossum[&!color=#ff0011]:0.191904)[&label=100,!color=#ff0011]:0.100102)[&label=96,!color=#ff0011]:0.131885,ADAT3_Green-anole[&!color=#ff0011]:0.479846)[&label=99,!color=#ff0011]:0.122838,ADAT3_Zebrafish[&!color=#ff0011]:0.54535)[&label=86,!color=#ff0011]:0.151488)[&label=94,!color=#ff0011]:0.212756,ADAT3_Western-clawed-frog[&!color=#ff0011]:0.920202)[&label=54,!color=#ff0011]:0.036649,ADAT3_Sea-lancelet[&!color=#ff0011]:0.639481)[&label=99,!color=#ff0011]:0.586964)[&label=100,!rotate=true,!color=#000dff]:2.368119)[&label=85,!color=#ba00a4]:0.273684,(((ADAR1_Sponge[&!color=#ba00a4]:1.084888,ADAR1_Sea-anemone[&!color=#ba00a4]:0.558833)[&label=97,!color=#ba00a4]:0.141231,ADAR1_Purple-sea-urchin[&!color=#ba00a4]:0.675748)[&label=78,!color=#ba00a4]:0.096142,(((((ADAR1_Opossum[&!color=#ba00a4]:0.250967,ADAR1_Platypus[&!color=#ba00a4]:0.277375)[&label=99,!color=#ba00a4]:0.062681,((ADAR1_Macaque[&!color=#ba00a4]:0.015286,(ADAR1_Chimpanzee[&!color=#ba00a4]:8.2E-4,ADAR1_Human[&!color=#ba00a4]:0.003999)[&label=100,!color=#ba00a4]:0.014026)[&label=100,!color=#ba00a4]:0.075851,ADAR1_Mouse[&!color=#ba00a4]:0.156135)[&label=100,!color=#ba00a4]:0.263917)[&label=100,!color=#ba00a4]:0.136405,ADAR1_Green-anole[&!color=#ba00a4]:0.895813)[&label=100,!color=#ba00a4]:0.104573,ADAR1_Western-clawed-frog[&!color=#ba00a4]:0.385742)[&label=100,!color=#ba00a4]:0.125611,ADAR1_Zebrafish[&!color=#ba00a4]:0.468658)[&label=100,!color=#ba00a4]:0.477814)[&label=81,!color=#ba00a4]:0.19046,ADAR1_Sea-vase[&!color=#ba00a4]:0.816514)[&label=87,!color=#ba00a4]:0.383738,ADAR1_Sea-lancelet[&!color=#ba00a4]:0.888382)[&label=100,!color=#b8009f]:0.64863)[&label=100,!color=#33adb8]:0.408718,ADAD2_Western-clawed-frog[&!color=#33adb8]:1.550143)[&label=99,!color=#33adb8]:0.106389);
+end;
+
+begin figtree;
+	set appearance.backgroundColorAttribute="Default";
+	set appearance.backgroundColour=#ffffff;
+	set appearance.branchColorAttribute="User selection";
+	set appearance.branchColorGradient=false;
+	set appearance.branchLineWidth=1.0;
+	set appearance.branchMinLineWidth=0.0;
+	set appearance.branchWidthAttribute="Fixed";
+	set appearance.foregroundColour=#000000;
+	set appearance.hilightingGradient=false;
+	set appearance.selectionColour=#2d3680;
+	set branchLabels.colorAttribute="Branch times";
+	set branchLabels.displayAttribute="label";
+	set branchLabels.fontName="sansserif";
+	set branchLabels.fontSize=8;
+	set branchLabels.fontStyle=0;
+	set branchLabels.isShown=true;
+	set branchLabels.significantDigits=4;
+	set layout.expansion=0;
+	set layout.layoutType="RECTILINEAR";
+	set layout.zoom=0;
+	set legend.attribute="label";
+	set legend.fontSize=10.0;
+	set legend.isShown=false;
+	set legend.significantDigits=4;
+	set nodeBars.barWidth=4.0;
+	set nodeBars.displayAttribute=null;
+	set nodeBars.isShown=false;
+	set nodeLabels.colorAttribute="User selection";
+	set nodeLabels.displayAttribute="Node ages";
+	set nodeLabels.fontName="sansserif";
+	set nodeLabels.fontSize=8;
+	set nodeLabels.fontStyle=0;
+	set nodeLabels.isShown=false;
+	set nodeLabels.significantDigits=4;
+	set nodeShapeExternal.colourAttribute="User selection";
+	set nodeShapeExternal.isShown=false;
+	set nodeShapeExternal.minSize=10.0;
+	set nodeShapeExternal.scaleType=Width;
+	set nodeShapeExternal.shapeType=Circle;
+	set nodeShapeExternal.size=4.0;
+	set nodeShapeExternal.sizeAttribute="Fixed";
+	set nodeShapeInternal.colourAttribute="User selection";
+	set nodeShapeInternal.isShown=false;
+	set nodeShapeInternal.minSize=10.0;
+	set nodeShapeInternal.scaleType=Width;
+	set nodeShapeInternal.shapeType=Circle;
+	set nodeShapeInternal.size=4.0;
+	set nodeShapeInternal.sizeAttribute="Fixed";
+	set polarLayout.alignTipLabels=false;
+	set polarLayout.angularRange=0;
+	set polarLayout.rootAngle=0;
+	set polarLayout.rootLength=100;
+	set polarLayout.showRoot=true;
+	set radialLayout.spread=0.0;
+	set rectilinearLayout.alignTipLabels=false;
+	set rectilinearLayout.curvature=0;
+	set rectilinearLayout.rootLength=100;
+	set scale.offsetAge=0.0;
+	set scale.rootAge=1.0;
+	set scale.scaleFactor=1.0;
+	set scale.scaleRoot=false;
+	set scaleAxis.automaticScale=true;
+	set scaleAxis.fontSize=8.0;
+	set scaleAxis.isShown=false;
+	set scaleAxis.lineWidth=1.0;
+	set scaleAxis.majorTicks=1.0;
+	set scaleAxis.minorTicks=0.5;
+	set scaleAxis.origin=0.0;
+	set scaleAxis.reverseAxis=false;
+	set scaleAxis.showGrid=true;
+	set scaleBar.automaticScale=true;
+	set scaleBar.fontSize=18.0;
+	set scaleBar.isShown=true;
+	set scaleBar.lineWidth=6.0;
+	set scaleBar.scaleRange=0.8;
+	set tipLabels.colorAttribute="User selection";
+	set tipLabels.displayAttribute="Names";
+	set tipLabels.fontName="sansserif";
+	set tipLabels.fontSize=8;
+	set tipLabels.fontStyle=0;
+	set tipLabels.isShown=true;
+	set tipLabels.significantDigits=4;
+	set trees.order=true;
+	set trees.orderType="increasing";
+	set trees.rooting=true;
+	set trees.rootingType="User Selection";
+	set trees.transform=false;
+	set trees.transformType="cladogram";
+end;
+
