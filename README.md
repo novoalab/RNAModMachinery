@@ -1,5 +1,7 @@
-# RNA Modification Machinery
-Scripts used to extract curated lists of RNA modification enzymes and assess their tissue-specificity across multiple species and tissues, as well as cancer and normal tissues
+# RNA Modification Machinery Analysis
+Scripts used to extract curated lists of RNA modification enzymes and assess their tissue-specificity across multiple species and tissues, as well as cancer and normal tissues, used in the paper:
+
+Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analyses of the RNA modification machinery reveal tissue- and cancer-specific signatures. bioRxiv 2019. doi: https://doi.org/10.1101/830968
 
 ## PART1: Search and extract sets of RNA modification ezymes in selected species across the tree of life
 
