@@ -3,6 +3,10 @@ Scripts used to extract curated lists of RNA modification enzymes and assess the
 
 Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analyses of the RNA modification machinery reveal tissue- and cancer-specific signatures. bioRxiv 2019. doi: https://doi.org/10.1101/830968
 
+
+## DATA ACCOMPANYING THIS PAPER CAN BE FOUND HERE: 
+https://public-docs.crg.es/enovoa/public/website/Begik_RMP2020.html 
+
 ## PART1: Search and extract sets of RNA modification ezymes in selected species across the tree of life
 
 ### FINDING RNA MODIFICATION ENZYMES in a specific SPECIES
