@@ -1,11 +1,10 @@
 # RNA Modification Machinery Analysis
 Scripts used to extract curated lists of RNA modification enzymes and assess their tissue-specificity across multiple species and tissues, as well as cancer and normal tissues, used in the paper:
 
-Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analyses of the RNA modification machinery reveal tissue- and cancer-specific signatures. bioRxiv 2019. doi: https://doi.org/10.1101/830968
+Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analyses of the RNA modification machinery reveal tissue- and cancer-specific signatures. Genome Biology, May 2020. doi: https://doi.org/10.1101/830968
 
 
-## DATA ACCOMPANYING THIS PAPER CAN BE FOUND HERE: 
-https://public-docs.crg.es/enovoa/public/website/Begik_RMP2020.html 
+## DATA ACCOMPANYING THIS PAPER CAN BE FOUND [HERE](https://public-docs.crg.es/enovoa/public/website/Begik_RMP2020.html)
 
 ## PART1: Search and extract sets of RNA modification ezymes in selected species across the tree of life
 
@@ -49,7 +48,8 @@ Initially obtained list of Main RNA Writer Proteins and we added non-catalytic s
 
 #### GTEx 
 Extract TPM values for the RNA modification enzymes from the GTEx TPM dataset
-```
+```[Information on the fractions can be found here](https://github.com/obegik/Oz_Mod_Analysis/blob/master/yeast_rRNA_fractions.md)
+
 Rscript gtex_manipulation.R <GTEX.Expression.File> <ENSEMBL_GeneSymbol_Class.File>
 
 # Example: Rscript gtex_manipulation.R GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct human_id_symbol_class.tsv
