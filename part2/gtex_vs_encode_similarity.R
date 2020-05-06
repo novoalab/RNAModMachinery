@@ -1,46 +1,67 @@
-###DATA SIMILARITY 
-#Library required
-#library(MASS)
-#library(reshape)
-#library(scales)
-#library(ggplot2)
+###################################################################
+## Expression profile similarity between datasets
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
 
-args <- commandArgs(trailingOnly = TRUE)
-input1 <- args[1] #1st variable
-gtex<- read.delim(input1) #RMLP.GTEX.TissueAveraged.TPM.tsv
-rownames(gtex)<- gtex$Symbol
-gtex<- gtex[,-c(1:3)]
-input2 <- args[2] #1st variable
-encode<- read.delim(input2)#RMLP.encode.TPM.brainav.tsv
-rownames(encode)<- encode$Symbol
-encode<- encode[,-c(1:4)]
+###Requirements
+#libraries: 
+#dplyr
+#MASS
+#reshape
+#scales
+#ggplot2
 
 
-rd1<-gtex
-ua <-encode 
+#how to use the script
+#Rscript gtex_tissuewide.R RMLP.GTEX.TissueAveraged.TPM.tsv
 
-##
-rd1_cn = colnames(rd1) 
-ua_cn = colnames(ua) 
-common_t = merge(rd1_cn,ua_cn,by.x=1,by.y=1) 
-common_t = as.character(common_t[,1]) 
-rd1 = rd1[,common_t] 
-ua = ua[,common_t] 
-rd1_d = rownames(rd1) 
-ua_d = rownames(ua) 
-common_d = merge(rd1_d,ua_d,by.x=1,by.y=1) 
-common_d = as.character(common_d[,1]) 
-rd = rd1[common_d,] 
-ua = ua[common_d,] 
+# 1. Arguments introduced for the execution
+########################################
+
+args <- commandArgs(trailingOnly = TRUE) #Argument for first input
+input1 <- args[1]#1st variable 
+input2 <- args[2] #2nd variable
 
 
-gtexM<-rd
-encodeM<-ua
 
+# 2. Importing and manipulating the data
+########################################
 
-####CALCULATE RESIDUALS FOR COMPARISON OF DATASETS
+#Load the library
+library(dplyr)
+library(reshape)
 library(MASS)#for RLM function
-gtexl<-log(gtexM+1)
+library(scales)
+library(ggplot2)
+
+
+
+
+gtex_input<- read.delim(input1) #RMLP.GTEX.TissueAveraged.TPM.tsv
+rownames(gtex_input)<- gtex_input$Symbol
+gtex_input<- gtex_input[,-c(1:3)]
+encode_input<- read.delim(input2)#RMLP.encode.TPM.brainav.tsv
+rownames(encode_input)<- encode_input$Symbol
+encode_input<- encode_input[,-c(1:4)]
+
+
+gtex_cn = colnames(gtex_input) 
+encode_cn = colnames(encode_input)
+common_t = merge(gtex_cn,encode_cn,by.x=1,by.y=1) 
+common_t = as.character(common_t[,1]) 
+gtex = gtex[,common_t] 
+encode = encode[,common_t] 
+gtex_d = rownames(gtex) 
+encode_d = rownames(encode) 
+common_d = merge(gtex_d,encode_d,by.x=1,by.y=1) 
+common_d = as.character(common_d[,1]) 
+gtex = gtex[common_d,] 
+encode = encode[common_d,] 
+
+
+# 3. CALCULATE RESIDUALS FOR COMPARISON OF DATASETS
+########################################
+gtexl<-log(gtex+1)
 gtexres<-gtexl
 res_vec <- vector() #res_vec file is a vector file that will contain all the residuals (tissue.vs.all) for all of the genes in all tissues
 	for (i in 1:dim(gtexl)[2]) {
@@ -49,7 +70,7 @@ res_vec <- vector() #res_vec file is a vector file that will contain all the res
 		#res_vec = c(res$residuals,res_vec) #this contains residuals for every gene in every tissuevsall combination
 }
 
-encodel<-log(encodeM+1)
+encodel<-log(encode+1)
 encoderes<-encodel
 res_vec <- vector() #res_vec file is a vector file that will contain all the residuals (tissue.vs.all) for all of the genes in all tissues
 	for (i in 1:dim(encodel)[2]) {
@@ -60,7 +81,6 @@ res_vec <- vector() #res_vec file is a vector file that will contain all the res
 
 
 #cormat<- cor(gtexres,encoderes)
-library(reshape)
 cormat <- round(cor(gtexres,encoderes),2)
 melted_cormat <- melt(cormat)
 
@@ -81,10 +101,8 @@ upper_tri <- get_upper_tri(cormat)
 lower_tri<-get_lower_tri(cormat)
 melted_cormat <- melt(lower_tri, na.rm = TRUE)
 
-
-library(scales)
-library(ggplot2)
-
+# 3. Plotting the correlation matrix
+########################################
 pdf("gtex_encode_correlation_matrix.pdf",height=5,width=5)
 ggplot(data = melted_cormat, aes(X1, X2, fill = value))+
  xlab("GTEX")+

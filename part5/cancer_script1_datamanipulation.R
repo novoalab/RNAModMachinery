@@ -1,4 +1,7 @@
-##%%%%%%%%%%%%TCGA-GTEX DATA MANIPULATION%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+###################################################################
+## TCGA-GTEX DATA MANIPULATION
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
 #Original file (With Sample ID and expression in ENSEMBL IDs)
 #TcgaTargetGtex_rsem_gene_tpm
 #Phenotype file
@@ -13,15 +16,50 @@
 #rwp_tRNA_all_ensembl contains ensembl ids of all RMWs
 #TcgaTargetGtex_rsem_gene_tpm contains log2(tpm+0.001) transformed expression values for 
 
+#How to run the script
+#Rscript cancer_script1_datamanipulation.R <TCGA.GTEX.file> <ENSEMBL.file>
+
+#Example:  Rscript cancer_script1_datamanipulation.R RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv human_id_symbol_class.tsv
+
+
+###Requirements
+#libraries: 
+#dplyr
+#plyr
+#reshape2
+#data.table
+
+
+
+
+
+# 1. Arguments introduced for the execution
+########################################
 
 args <- commandArgs(trailingOnly = TRUE) #Argument for first input
 input1 <- args[1]#1st variable 
-data<-read.delim(input1)#RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv
-library(dplyr) #load the package for data manipulation
+input2 <- args[2] #2nd variable
+
+
+
+# 1.Importing the data and manipulating
+########################################
+
+
+
+#Load the library
+library(dplyr)
 library(plyr)
+library(reshape2)
+library(data.table)
+
+
+
+
+
+
+data<-read.delim(input1)#RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv
 data$sample <- gsub("\\..*","",data$sample) #remove everything after "." in ENSEMBL IDs
-args <- commandArgs(trailingOnly = TRUE) #Argument for first input
-input2 <- args[2]#2nd variable #human_id_symbol_class.tsv 
 ensembl <- read.table(input2, sep="\t",header=TRUE)#import the ensembl file that contains ENSEMBL ID and matching GeneNames
 colnames(ensembl)<- gsub("gene_id","sample",colnames(ensembl)) 
 joined<- join(data, ensembl, by="sample") #use join function to add a column of gene names corresponding to the ENSEMBL ID to the last column
@@ -49,12 +87,11 @@ withphenotype3<- cbind(withphenotype[,c(1:3)], withphenotype2)
 write.table(withphenotype3,file="RMLP.TcgaTargetGtex_tpm_with_phenotype.tsv",row.names=FALSE, quote=FALSE, sep="\t",col.names=TRUE) #export
 
 
-library(data.table)
-gtex<- withphenotype3[withphenotype3$sample %like% "GTEX", ] #7792 GTEX sample
-tcga<- withphenotype3[withphenotype3$sample %like% "TCGA", ] #7792 GTEX sample
-k562<- withphenotype3[withphenotype3$sample %like% "K-562", ] #7792 GTEX sample
+gtex<- withphenotype3[withphenotype3$sample %like% "GTEX", ] # GTEX sample
+tcga<- withphenotype3[withphenotype3$sample %like% "TCGA", ] # TCGA sample
+k562<- withphenotype3[withphenotype3$sample %like% "K-562", ] # K562 cell lines (TARGET) sample
 
-
+# Extract table for each cancer type seperately
 ACC_TCGA<-tcga[tcga$detailedcategory %like% "Adrenocortical Cancer", ]
 BLCA_TCGA<-tcga[tcga$detailedcategory %like% "Bladder Urothelial Carcinoma", ]
 BRCA_TCGA<-tcga[tcga$detailedcategory %like% "Breast Invasive Carcinoma", ]
@@ -87,6 +124,8 @@ THYM_TCGA<-tcga[tcga$detailedcategory %like% "Thymoma", ]
 UCEC_TCGA<-tcga[tcga$detailedcategory %like% "Uterine Corpus Endometrioid Carcinoma", ]
 UCS_TCGA<-tcga[tcga$detailedcategory %like% "Uterine Carcinosarcoma", ]
 
+
+# Add a repeating column
 ACC_TCGA$Type <- rep("ACC",nrow(ACC_TCGA))
 BLCA_TCGA$Type <- rep("BLCA",nrow(BLCA_TCGA))
 BRCA_TCGA$Type <- rep("BRCA",nrow(BRCA_TCGA))
@@ -119,7 +158,7 @@ THYM_TCGA$Type <- rep("THYM",nrow(THYM_TCGA))
 UCEC_TCGA$Type <- rep("UCEC",nrow(UCEC_TCGA))
 UCS_TCGA$Type <- rep("UCS",nrow(UCS_TCGA))
 
-
+# Extract table for each tissue type seperately
 ACC_GTEX<-gtex[gtex$detailedcategory %like% "Adrenal", ]
 BLCA_GTEX<-gtex[gtex$detailedcategory %like% "Bladder", ]
 BRCA_GTEX<-gtex[gtex$detailedcategory %like% "Breast", ]
@@ -149,7 +188,7 @@ UCEC_GTEX<-gtex[gtex$detailedcategory %like% "Uterus", ]
 UCS_GTEX<-gtex[gtex$detailedcategory %like% "Uterus", ]
 
 
-
+# Add a repeating column
 ACC_GTEX$Type <- rep("ACC",nrow(ACC_GTEX))
 BLCA_GTEX$Type <- rep("BLCA",nrow(BLCA_GTEX))
 BRCA_GTEX$Type <- rep("BRCA",nrow(BRCA_GTEX))
@@ -178,13 +217,16 @@ THYM_GTEX$Type <- rep("THYM",nrow(THYM_GTEX))
 UCEC_GTEX$Type <- rep("UCEC",nrow(UCEC_GTEX))
 UCS_GTEX$Type <- rep("UCS",nrow(UCS_GTEX))
 
+
+#Bind the TCGA and GTEX subtables
 tcga2<-rbind(ACC_TCGA,BLCA_TCGA,BRCA_TCGA,CESC_TCGA,CHOL_TCGA,COAD_TCGA,DLBC_TCGA,ESCA_TCGA,GBM_TCGA,HNSC_TCGA,KICH_TCGA,KIRC_TCGA,KIRP_TCGA,LAML_TCGA,LGG_TCGA,LIHC_TCGA,LUAD_TCGA,LUSC_TCGA,OV_TCGA,PAAD_TCGA,PCPG_TCGA,PRAD_TCGA,READ_TCGA,SARC_TCGA,SKCM_TCGA,STAD_TCGA,TGCT_TCGA,THCA_TCGA,THYM_TCGA,UCEC_TCGA,UCS_TCGA)
 gtex2<- rbind(ACC_GTEX,BLCA_GTEX,BRCA_GTEX,CESC_GTEX,COAD_GTEX,DLBC_GTEX,ESCA_GTEX,GBM_GTEX,KICH_GTEX,KIRC_GTEX,KIRP_GTEX,LAML_GTEX,LGG_GTEX,LIHC_GTEX,LUAD_GTEX,LUSC_GTEX,OV_GTEX,PAAD_GTEX,PRAD_GTEX,READ_GTEX,SKCM_GTEX,STAD_GTEX,TGCT_GTEX,THCA_GTEX,THYM_GTEX,UCEC_GTEX,UCS_GTEX)
+#Bind both TCGA and GTEX
 tcga_gtex<-rbind(tcga2,gtex2)
 tcga_gtex <- tcga_gtex %>% select(Type, everything()) #place the last column to first column
 #write.table(tcga_gtex,file="TCGA_GTEX_FINAL.forR.tsv",quote=FALSE,sep="\t",row.names=FALSE)
 
-##R 
+
 #tcga_gtex<- read.delim("TCGA_GTEX_FINAL.forR.tsv")
 tcga_gtex2<-tcga_gtex[order(tcga_gtex$MRM3),] #Sort by any gene to see if there is any data point that has off pattern
 tcga_gtex2<- subset(tcga_gtex2, tcga_gtex2$MRM3 > -9.9657) #Remove the rows that has -9.9658 values
@@ -228,10 +270,5 @@ logfile2<- logfile[!logfile$Type %in% remove, ]
 write.table(logfile2,file="TCGA_GTEX_FINAL.log2.without3cancer.tsv",quote=FALSE, sep="\t",row.names=FALSE)
 
 
-
-#How to run the script
-#Rscript cancer_script1_datamanipulation.R <TCGA.GTEX.file> <ENSEMBL.file>
-
-#Example:  Rscript cancer_script1_datamanipulation.R RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv human_id_symbol_class.tsv
 
 

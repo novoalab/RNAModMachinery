@@ -1,11 +1,32 @@
+###################################################################
+## EXTRACTING SPECIFIC GENES FROM GTEx TPM File
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
+
 ###Requirements
 #libraries: 
-#plyr
 #dplyr
+####How to use the script
+#Rscript gtex_manipulation.R GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct human_id_symbol_class.tsv
 
-#Manipulating initial GTEX TPM table for further analysis
+
+
+# 1. Arguments introduced for the execution
+########################################
+
 args <- commandArgs(trailingOnly = TRUE) #Argument for first input
 input1 <- args[1]#1st variable 
+input2 <- args[2] #2nd variable
+
+
+
+# 2. Importing and manipulating the data
+########################################
+
+#Load the library
+library(dplyr)
+
+
 #File name I will use GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct
 data<-read.delim(input1) #Import data
 colnames(data)<- gsub("\\.","",colnames(data))#Remove ... and . from colnames introduced by R
@@ -55,15 +76,15 @@ data2<-data[,3:dim(data)[2]]#Cut the matrix before ordering it by columns (to av
 data3<-data2[ , order(names(data2))] #Order the columns by column names
 data4<-cbind(data[1],data[2],data3) #Add first two columns back to the matrix
 
-#####Second variable here
-args <- commandArgs(trailingOnly = TRUE)
-input2 <- args[2] #2nd variable
+
+
+# 3. Importing the gene list and joining them with the initial input
+#####################################################################
+
 ensembl <- read.table(input2, sep="\t",header=TRUE)#import the ensembl file that contains ENSEMBL ID and matching GeneNames
-library(plyr) #Plyr needed for join function
 joined<- plyr::join(data4, ensembl, by="gene_id") #use join function to add a column of gene names/Class corresponding to the ENSEMBL ID to the last column
 joined2<- na.omit(joined, cols="Class") #Remove the rows that contain non-matching genes
 #joined2 is tha expression file for RNA Modification Machinery Proteins (RMMs)
-library(dplyr) #load the package for data manipulation
 replaced <- joined2 %>% dplyr::select(Class, everything()) #place the last column to first column
 replaced2 <- replaced %>% dplyr::select(Symbol, everything())#place the last column to first column
 replaced2$Description <- NULL#Remove the redundant column (Gene names)
@@ -74,7 +95,7 @@ replaced3<-replaced2[order(replaced2$Class),] #Sort by Class
 replaced3[,"Cells_EBV"]<-NULL #Remove Cells 
 replaced3[,"Cells_FIB"]<-NULL #Remove Cells
 replaced3[,"WholeBlood"]<-NULL #Remove Whole Blood
-write.table(replaced3,file="RMLP.GTEX.TPM.tsv",quote=FALSE, sep="\t",row.names=FALSE)
+write.table(replaced3,file="RMLP.GTEX.TPM.tsv",quote=FALSE, sep="\t",row.names=FALSE) #Export TPM for specific genes
 
 #Take mean of tissues with multiple parts (Brain, Cerebellum etc.)
 replaced3$Brain <- rowMeans(replaced3[,grep("^Brain_",colnames(replaced3))],na.rm = TRUE) #Mean of the columns that have matching name
@@ -100,8 +121,4 @@ replaced3[,grep("^Skin_",colnames(replaced3))]<- NULL
 replaced4<-replaced3[,4:dim(replaced3)[2]]#Cut the matrix before ordering it by columns (to avoid gene_id and Description columns)
 replaced5<-replaced4[ , order(names(replaced4))] #Order the columns by column names
 final<-cbind(replaced3[1],replaced3[2],replaced3[3], replaced5) #Add first two columns back to the matrix
-write.table(final,file="RMLP.GTEX.TissueAveraged.TPM.tsv",quote=FALSE, sep="\t",row.names=FALSE) #export table
-
-
-####How to use the script
-#Rscript gtex_manipulation.R GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct human_id_symbol_class.tsv
+write.table(final,file="RMLP.GTEX.TissueAveraged.TPM.tsv",quote=FALSE, sep="\t",row.names=FALSE) #Export TPM for specific genes in averaged tissues

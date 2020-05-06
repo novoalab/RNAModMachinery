@@ -1,4 +1,8 @@
-##Tumor vs Normal Barplots and Boxplots
+####################################################################
+## BOXPLOT OF EACH RMP GENE (NORMAL VS TUMOR)
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
+
 
 #Required libraries
 #library(ggplot2)
@@ -6,15 +10,18 @@
 #library(EnvStats)
 
 
+
+#LIBRARIES NEEDED
+library(ggplot2)
+library(ggpubr) 
+library(EnvStats)
+
 #INPUT
 args <- commandArgs(trailingOnly = TRUE) #Argument for first input
 input1 <- args[1]#1st variable 
 logfile<-read.table(input1, header=T, sep="\t") #TCGA_GTEX_FINAL.log2.without3cancer.tsv
 #tpmfile<-read.table("TCGA_GTEX_FINAL.TPM.without3cancer.tsv", header=T, sep="\t")
-#LIBRARIES NEEDED
-library(ggplot2)
-library(ggpubr) 
-library(EnvStats)
+
 dat<-logfile #Use logTPM file as dat file
 #Print boxplot with outliers with multiple groups ##TPM
 for (i in c(5:dim(dat)[2])) {

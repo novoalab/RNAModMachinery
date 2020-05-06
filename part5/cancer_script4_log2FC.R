@@ -1,14 +1,54 @@
+####################################################################
+## Tumor and Normal Log2FC Calculation
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
 #Log2 FC calculation
 #The expression data are first log2(TPM+1) transformed for differential analysis and 
 #the log2FC is defined as median(Tumor) - median(Normal).
 #Genes with higher |log2FC| values  than pre-set thresholds (1.5) 
 #are considered differentially expressed genes.
 
-args <- commandArgs(trailingOnly = TRUE)
-input1 <- args[1]#1st variable
+
+  #Required libraries
+    #library(ggplot2)
+    #library(ggpubr) 
+    #library(EnvStats)
+    #library(ComplexHeatmap)
+    #library(circlize)
+    #library(plyr)
+    #library(reshape2)
+    #library(ggrepel) 
+
+
+#Rscript cancer_script4_log2FC.R medianlog_tumor_normal.tpm.tsv RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv
+
+# 1. Arguments introduced for the execution
+########################################
+
+args <- commandArgs(trailingOnly = TRUE) #Argument for first input
+input1 <- args[1]#1st variable 
+input2 <- args[2]#2nd variable 
+
+
+
+
+# 2.Importing the data and manipulating
+########################################
+
+
+#Load the library
+    library(ggplot2)
+    library(ggpubr) 
+    library(EnvStats)
+    library(ComplexHeatmap)
+    library(circlize)
+    library(plyr)
+    library(reshape2)
+    library(ggrepel) 
+
+
+
 medianfile<-read.table(input1, header=T, sep="\t") #medianlog_tumor_normal.tpm.tsv
-#medianfile2<-medianfile
-#medianfile2[,-c(1,2)]<- log(medianfile2[,-c(1,2)]) #Take log of the file
 medianfileN <- medianfile[with(medianfile, medianfile$Type %in% "Normal"),]
 medianfileT <- medianfile[with(medianfile, medianfile$Type %in% "Tumor"),]
 log2FC<- medianfileT[,-c(1,2)]-medianfileN[,-c(1,2)]
@@ -17,13 +57,12 @@ log2FC_3<-log2FC_2
 rownames(log2FC_3)<-log2FC_2[,1]
 log2FC_3<-log2FC_3[,-1]
 log2FC_4<-t(log2FC_3)
-library(reshape2)
 log2FC_5<- melt(log2FC_4) #To export
 write.table(log2FC_5,file="log2FC_TvsN.tsv",quote=FALSE,sep="\t",row.names=FALSE)  #Export melted file containing log(ratio)
 
 
 
-######Making barplot for the significant gene count########################
+## Labeling significant genes
 log2fc_significant <- log2FC_5
 colnames(log2fc_significant)<- c("Gene", "Tissue", "log2FC")
 log2fc_significant2<-subset(log2fc_significant, log2FC> 1 | log2FC < -1)
@@ -40,7 +79,19 @@ down_log2FC4 <- down_log2FC3[order(down_log2FC3$Freq),]
 up_log2FC4$Var1 <- factor(up_log2FC4$Var1, levels = unique(up_log2FC4$Var1))
 down_log2FC4$Var1 <- factor(down_log2FC4$Var1, levels = unique(down_log2FC4$Var1))
 
-library(ggplot2)
+
+
+
+
+
+
+
+
+
+# 3.Barplot of UP-regulated and DOWN-regulated RMPs
+####################################################
+
+
 pdf("log2FC_UP_Barplot.pdf",height=10,width=5)
 p <- ggplot(up_log2FC4, aes(x=Var1,y=Freq)) + 
        geom_bar(stat="identity",width = 0.75)+
@@ -59,7 +110,7 @@ p <- ggplot(up_log2FC4, aes(x=Var1,y=Freq)) +
 print(p) 
 dev.off()
 
-library(ggplot2)
+
 pdf("log2FC_DOWN_Barplot.pdf",height=10,width=5)
 p <- ggplot(down_log2FC4, aes(x=Var1,y=Freq)) + 
        geom_bar(stat="identity",width = 0.75)+
@@ -77,12 +128,17 @@ p <- ggplot(down_log2FC4, aes(x=Var1,y=Freq)) +
        ylim(0,15)
 print(p) 
 dev.off()
-##############################
 
 
 
 
-######Making barplot for the significant tissue count########################
+
+
+
+
+# 4.Barplot of Tissues with their significant gene counts
+####################################################
+
 log2fc_significant <- log2FC_5
 colnames(log2fc_significant)<- c("Gene", "Tissue", "log2FC")
 log2fc_significant2<-subset(log2fc_significant, log2FC> 1 | log2FC < -1)
@@ -99,7 +155,6 @@ down_log2FC4 <- down_log2FC3[order(down_log2FC3$Freq),]
 up_log2FC4$Var1 <- factor(up_log2FC4$Var1, levels = unique(up_log2FC4$Var1))
 down_log2FC4$Var1 <- factor(down_log2FC4$Var1, levels = unique(down_log2FC4$Var1))
 
-library(ggplot2)
 pdf("log2FC_UP_TissueBarplot.pdf",height=10,width=5)
 p <- ggplot(up_log2FC4, aes(x=Var1,y=Freq)) + 
        geom_bar(stat="identity",width = 0.75)+
@@ -118,7 +173,6 @@ p <- ggplot(up_log2FC4, aes(x=Var1,y=Freq)) +
 print(p) 
 dev.off()
 
-library(ggplot2)
 pdf("log2FC_DOWN_TissueBarplot.pdf",height=10,width=5)
 p <- ggplot(down_log2FC4, aes(x=Var1,y=Freq)) + 
        geom_bar(stat="identity",width = 0.75)+
@@ -136,7 +190,6 @@ p <- ggplot(down_log2FC4, aes(x=Var1,y=Freq)) +
        ylim(0,65)
 print(p) 
 dev.off()
-##############################
 
 
 
@@ -147,23 +200,17 @@ dev.off()
 
 
 
-
-
-
-################################################
-####HEATMAP WITH COMPLEX HEATMAP PACKAGE############
+# 5.Heatmap
+####################################################
 
 ####This is for the Class information in the heatmap
-data<-read.delim("RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv")#RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv
-library(dplyr) #load the package for data manipulation
-library(plyr)
+data<-read.delim(input2) #RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv
 data$sample <- gsub("\\..*","",data$sample) #remove everything after "." in ENSEMBL IDs
 ensembl <- read.table("human_id_symbol_class.tsv", sep="\t",header=TRUE)#import the ensembl file that contains ENSEMBL ID and matching GeneNames
 colnames(ensembl)<- gsub("gene_id","sample",colnames(ensembl)) 
 joined<- join(data, ensembl, by="sample")
 
-library(ComplexHeatmap)
-library(circlize)
+
 pdf("heatmap_log2FC.pdf",height=15,width=15)
 heat<-Heatmap(log2FC_4, name = "log(ratio)", 
         col = colorRamp2(c(-1.5,-1,0,1,1.5), c("#2c7bb6","#abd9e9","floralwhite","#fdae61", "#d7191c"),space = "RGB"), 
@@ -193,7 +240,6 @@ dev.off()
 
 
 ###Boxplot alphabetical order
-library(ggrepel) #to repel the labels overlapping
 boxdata<-log2FC_5
 boxdata<-boxdata[order(boxdata$value),] #Sort by any gene to see if there is any data point that has off pattern
 pdf("boxplot_log2FC_alphabetical.pdf",height=10,width=20)
@@ -217,7 +263,12 @@ dev.off()
 
 
 
-#To make boxplot the same order as heatmap
+
+
+# 5.Boxplot with the same order as Heatmap
+####################################################
+
+
 cols<- as.data.frame(colnames(log2FC_4)) 
 cols$order<- rownames(cols)
 order<- as.data.frame(column_order(heat))

@@ -1,3 +1,8 @@
+####################################################################
+## Tumor and Normal Median Values and Heatmap
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
+
 ##Tumor vs Normal Median Heatmap
 	#Required libraries
 		#library(ggplot2)
@@ -8,15 +13,23 @@
 		#library(plyr)
 
 
-args <- commandArgs(trailingOnly = TRUE) #Argument for first input
-input1 <- args[1]#1st variable 
-logfile<-read.table(input1, header=T, sep="\t") #TCGA_GTEX_FINAL.log2.without3cancer.tsv
 #LIBRARIES NEEDED
 library(ggplot2)
 library(ggpubr) 
 library(EnvStats)
 library(ComplexHeatmap)
 library(circlize)
+library(plyr)
+
+args <- commandArgs(trailingOnly = TRUE) #Argument for first input
+input1 <- args[1]#1st variable 
+
+
+
+
+
+#INPUT
+logfile<-read.table(input1, header=T, sep="\t") #TCGA_GTEX_FINAL.log2.without3cancer.tsv
 
 
 
@@ -59,8 +72,6 @@ medianfile<-read.table("medianlog_tumor&normal.tpm.tsv", header=T, sep="\t")
 medianfile2<-medianfile[,-c(1,2)]#Remove first two columns
 ####HEATMAP WITH COMPLEX HEATMAP PACKAGE
 #https://bioconductor.org/packages/release/bioc/vignettes/ComplexHeatmap/inst/doc/s2.single_heatmap.html
-library(ComplexHeatmap)
-library(circlize)
 Type<- as.data.frame(medianfile$Type)
 colnames(Type)<- c("Type")
 ha = rowAnnotation(df = Type, col = list(Type = c("Normal" = "#66CC99", "Tumor" = "#FF6961")),
@@ -90,16 +101,3 @@ Heatmap(medianfile3, name = "z-scale log(TPM+1)",
         gap = unit(1, "mm"), #Gap
 )+ha
 dev.off()
-
-
-
-
-
-
-
-
-
-
-
-
-

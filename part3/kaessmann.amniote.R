@@ -1,25 +1,51 @@
-#R scripts for Kaessman Amniote data
-#Library required
+###################################################################
+## Analysis of Kaessmann Amniote Data
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
+
+###Requirements
 #library(plyr)
 #library(dplyr) 
 #library(ggplot2)
 #library(grid)
 #ibrary(gridExtra)
 #library(MASS)
-#KAESSMANN DATANormalizedRPKM_ConstitutiveExons_Amniote1to1Orthologues.txt
-args <- commandArgs(trailingOnly = TRUE)
-input1 <- args[1] #1st variable
-data<- read.delim(input1) #primate RPKM data
-data[2:5]<-NULL  #Columns that contain other species ENSEMBL ID
-args <- commandArgs(trailingOnly = TRUE)
+
+
+
+#How to run the script
+#Rscript kaessman.amniote.R NormalizedRPKM_ConstitutiveExons_Amniote1to1Orthologues.txt human_id_symbol_class.tsv
+
+
+
+# 1. Arguments introduced for the execution
+########################################
+
+args <- commandArgs(trailingOnly = TRUE) #Argument for first input
+input1 <- args[1]#1st variable 
 input2 <- args[2] #2nd variable
+
+
+
+# 2. Importing and manipulating the data
+########################################
+
+#Load the library
+library(plyr)
+library(dplyr) 
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(MASS)
+
+
+data<- read.delim(input1) #Amniote RPKM data
+data[2:9]<-NULL  #Columns that contain other species ENSEMBL ID
 ensembl <- read.table(input2, sep="\t",header=TRUE)#import the ensembl file that contains ENSEMBL ID and matching GeneNames
 colnames(ensembl)[colnames(ensembl)=="gene_id"] <- "hsa" #Rename the gene_id column to hsa
-library(plyr)
 joined<- join(data, ensembl, by="hsa") #use join function to add a column of gene names/Class corresponding to the ENSEMBL ID to the last column
 joined2<- na.omit(joined, cols="Class") #Remove the rows that contain non-matching genes
 #joined2 is tha expression file for RNA Modification Related Proteins (RMLP)
-library(dplyr) #load the package for data manipulation
 replaced <- joined2 %>% select(Class,Symbol, everything()) #place the last column to first column
 replaced2<-replaced[order(replaced$Class),] #Sort by ClasS
 replaced2$hsa<-NULL
@@ -48,31 +74,34 @@ rownames(replaced4)<- gsub("ts","Testis",rownames(replaced4))
 
 
 
+
 ####DATA MANIPULATION FOR PCA ANALYSIS
 replaced5 <- log(replaced4+1) #log transformation
 replaced6<- t(scale(t(replaced5))) #Scaling the data by the genes
+
+
 data_pca<-prcomp(replaced6,center=TRUE) #PCA 
 data_out <- as.data.frame(data_pca$x) #X table of PCA
 data_out$species <- gsub("_.*","", row.names(replaced6)) #Create a column for species
 data_out$tissue <- gsub(".*_","", row.names(replaced6)) #create a column for tissues
 data_out$tissue <- sub("\\..*","", data_out$tissue)#create a column for tissues
 data_out$species <- factor(data_out$species , levels = unique(data_out$species))#keep the order of species
+
+
 ##Calculation for percentage of variance explained by each component
 eigs <- data_pca$sdev^2#Calculate percentage for PC values
 percentage<- round(eigs/sum(eigs)*100,2)#Calculate percentage for PC values
 percentage <- paste( colnames(data_out), "(", paste( as.character(percentage), "%", ")", sep="") ) #Calculate percentage for PC values
-library(ggplot2)
-library(grid)
-library(gridExtra)
+
 ## PLOT FOR X
-pdf("pca_primate.pdf",height=5,width=6.5)
+pdf("pca_amniote.pdf",height=5,width=6.5)
 print(ggplot(data_out,aes(x=PC1,y=PC2,shape=species,color=tissue ))+
 	geom_point()+
-	scale_shape_manual(values=c(22,23,24,14,15,16))+ #Shapes
+	scale_shape_manual(values=c(22,23,24,14,15,16,17,18,20,21))+ #Shapes
 	scale_color_manual(values=c("#4575b4","#91bfdb","#8c510a","#af8dc3","#7fbf7b","#d73027"))+
 	geom_hline(yintercept = 0, lty = 2) +
 	geom_vline(xintercept = 0, lty = 2)+
-	geom_point(alpha = 0.8, size = 2)+
+	geom_point(alpha = 1, size = 4)+
 	theme(panel.background = element_blank(),
 		panel.border=element_rect(fill=NA),
 		panel.grid.major = element_blank(),
@@ -90,13 +119,16 @@ dev.off()
 data_out_r <- as.data.frame(data_pca$rotation) #rotation data (loadings)
 data_out_r$Symbol <- row.names(data_out_r) 
 data_out_r<- join(data_out_r, ensembl, by="Symbol") #Include the Class information
-pdf(file="pca_primate.loadings.pdf",height=5,width=6.5)
+
+
+
+pdf(file="pca_amniote.loadings.pdf",height=5,width=7)
 print(ggplot(data_out_r,aes(x=PC1,y=PC2,label=Symbol,color=Class))+
-	geom_point()+
 	scale_color_manual(values = c("#117A65","#D2B4DE","#F1948A","#B03A2E","#85C1E9","#17202A","#7B7D7D"))+
+	geom_point()+
 	geom_hline(yintercept = 0, lty = 2) +
 	geom_vline(xintercept = 0, lty = 2)+
-	geom_point(alpha = 0.8, size = 2)+
+	geom_point(alpha = 1, size = 4)+
 	theme(panel.background = element_blank(),
 		panel.border=element_rect(fill=NA),
 		panel.grid.major = element_blank(),
@@ -111,18 +143,19 @@ print(ggplot(data_out_r,aes(x=PC1,y=PC2,label=Symbol,color=Class))+
 	)
 dev.off()
 
-
-##PLOT FOR LOADINGS FOR SOME LABELS
+##PLOT FOR LOADINGS SOME LABELS
 data_out_r <- as.data.frame(data_pca$rotation) #rotation data (loadings)
 data_out_r$Symbol <- row.names(data_out_r) 
 data_out_r<- join(data_out_r, ensembl, by="Symbol") #Include the Class information
-pdf(file="pca_primate.loadings.pdf",height=5,width=6.5)
+
+
+pdf(file="pca_amniote.loadings.somelabels.pdf",height=5,width=7)
 print(ggplot(data_out_r,aes(x=PC1,y=PC2,label=Symbol,color=Class))+
-	geom_point()+
 	scale_color_manual(values = c("#117A65","#D2B4DE","#F1948A","#B03A2E","#85C1E9","#17202A","#7B7D7D"))+
+	geom_point()+
 	geom_hline(yintercept = 0, lty = 2) +
 	geom_vline(xintercept = 0, lty = 2)+
-	geom_point(alpha = 0.8, size = 2)+
+	geom_point(alpha = 1, size = 4)+
 	theme(panel.background = element_blank(),
 		panel.border=element_rect(fill=NA),
 		panel.grid.major = element_blank(),
@@ -148,15 +181,17 @@ new$tissue <- sub("\\..*","", new$tissue)#Create a column for tissue
 new <- new %>% dplyr::select(species,tissue, everything())
 new$species <- factor(new$species , levels = unique(new$species)) #keep the order
 dat<-new
+
+
 ###For loop for the barplot 
 for (i in c(3:dim(dat)[2])) {
 	vname<- noquote(paste(colnames(new)[i]))
 	#Plot the ggplot with error bars (both min and max)
-	pdf(file=paste(vname, "barplot_primate_logrpkm.pdf", sep=".") ,height=10,width=10)
+	pdf(file=paste(vname, "barplot_amniote_logrpkm.pdf", sep=".") ,height=10,width=10)
 	print(ggplot(new, aes_string(x=colnames(new)[2], y=colnames(new)[i], fill=colnames(new)[2])) + 
 		geom_bar(stat="summary",fun.y="mean")+
-	    scale_fill_manual(values=c("#4575b4","#91bfdb","#8c510a","#af8dc3","#7fbf7b","#d73027"))+
 		facet_wrap(~species,scales = "free")+
+		scale_fill_manual(values = c("#4575b4","#91bfdb","#8c510a","#af8dc3","#7fbf7b","#d73027"))+
 		theme(panel.background = element_blank(),
 			panel.border=element_rect(fill=NA),
 			panel.grid.major = element_blank(),
@@ -173,9 +208,7 @@ for (i in c(3:dim(dat)[2])) {
 
 
 ##TISSUE-VS-ALL ANALYSIS
-
-#A GIANT FOR LOOP FOR THE ANALYSIS
-library(MASS)
+#A FOR LOOP FOR THE ANALYSIS
 for (sp in unique(new$species)) {
 	new2<- new[with(new, new$species %in% sp),]
 	new3 <- aggregate(. ~ tissue, new2[,-1], function(x) c(mean = mean(x))) #mean of same tissues
@@ -235,5 +268,4 @@ for (sp in unique(new$species)) {
 }
 
 
-#How to run the script
-#Rscript kaessman.primate.R NormalizedRPKM_ConstitutiveExons_Primate1to1Orthologues.txt human_id_symbol_class.tsv
+

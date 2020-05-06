@@ -1,16 +1,56 @@
-#Dysregulation analysis 
+####################################################################
+## Dysregulation Analysis
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
 
-#Input for all the genes
+
+  #Required libraries
+  #Required libraries
+    #library(ggplot2)
+    #library(ggpubr) 
+    #library(ComplexHeatmap)
+    #library(circlize)
+    #library(plyr)
+    #library(reshape2)
+    #library(ggrepel) 
+    #library(MASS)#for RLM function
+
+
+
+
+# 1. Arguments introduced for the execution
+########################################
+
 args <- commandArgs(trailingOnly = TRUE) #Argument for first input
 input1 <- args[1]#1st variable 
+input2 <- args[2] #2nd variable
+
+
+
+
+
+
+# 2.Importing the data and manipulating
+########################################
+
+
+library(MASS)
+library(ggplot2)
+library(ggrepel) 
+library(MASS)
+library(ggpubr)
+library(ComplexHeatmap)
+library(circlize)
+library(plyr)
+
+
+
 median_all<- read.delim(input1) #all_genes_logmedian_scatter_format.tsv
 median_all$ID <- gsub("\\.*","",median_all$ID )
 median_all$Origin<- rep("ALL",nrow(median_all))
 
 
 #Input for RMP
-args <- commandArgs(trailingOnly = TRUE) #Argument for second input
-input2 <- args[2]#2nd variable 
 median_RMP<-read.delim(input2) #medianlog_tumor_normal.tpm.tsv
 median_RMP_N <- median_RMP[with(median_RMP, median_RMP$Type %in% "Normal"),] #Normal Mean Data
 median_RMP_T <- median_RMP[with(median_RMP, median_RMP$Type %in% "Tumor"),] #Tumor Mean Data
@@ -20,7 +60,6 @@ rownames(median_RMP_N2)<- median_RMP_N$detailedcategory
 rownames(median_RMP_T2)<- median_RMP_T$detailedcategory
 median_RMP_N3<-t(median_RMP_N2)#Transpose
 median_RMP_T3<-t(median_RMP_T2)#Transpose
-library(reshape2)
 Nexp<- melt(median_RMP_N3) #Reformat the matrix
 Nexp$comb <- paste(Nexp[,1],Nexp[,2]) #Combine Gene-Tissue pair
 Texp<-melt(median_RMP_T3)#Reformat the matrix
@@ -34,9 +73,7 @@ final_merged_forthreshold<- rbind(median_all,scatter)
 
 ####PLOTTING ONLY THE RMPS####
 #Calculate threshold
-library(MASS)#for RLM function
-library(ggplot2)#plotting
-library(ggrepel) #to repel the labels overlapping
+
 specific_genes<-vector()  #Empty vector for dysregulated genes
 dysregulation_scores<- vector() #empty vector for dysregulation scores
 for (tissue in unique(final_merged_forthreshold$Type)){ #for every single tissue
@@ -46,9 +83,6 @@ for (tissue in unique(final_merged_forthreshold$Type)){ #for every single tissue
 	res_vec= c(res$residuals,res_vec)#this contains residuals for every gene in every tissuevsall combination
 	threshold <- 2.5*sd(res_vec) #The threshold is 2.5 times the standard deviation of all the residuals
 	##Seperate plots and calculations for each tissue
-	library(ggplot2)
-	library(ggrepel) #to repel the labels overlapping
-	library(ggpubr)
 	#subset <- scatter[with(scatter, scatter$Tissue %in% tissue),]
 	#res<- rlm(subset$Tumor ~0 + subset$Normal)
 	subset$res<- res$residuals
@@ -88,11 +122,7 @@ write.table(dysregulation_scores, file="dysregulation_scores.tsv",quote=FALSE, r
 
 
 ######PLOTTING ALL THE GENES AND LABELLING RMPS
-#Calculate threshold
-library(MASS)#for RLM function
-library(ggplot2)#plotting
-library(ggrepel) #to repel the labels overlapping
-library(ggpubr)
+
 specific_genes<-vector()  #Empty vector for dysregulated genes
 dysregulation_scores<- vector() #empty vector for dysregulation scores
 for (tissue in unique(final_merged_forthreshold$Type)){ #for every single tissue
@@ -168,7 +198,6 @@ up_dys4$Var1 <- factor(up_dys4$Var1, levels = unique(up_dys4$Var1))
 down_dys4$Var1 <- factor(down_dys4$Var1, levels = unique(down_dys4$Var1))
 
 
-library(ggplot2)
 pdf("Dys_UP_Barplot2.pdf",height=5,width=5)
 p <- ggplot(up_dys4, aes(x=Var1,y=Freq)) + 
        geom_bar(stat="identity",width = 0.75)+
@@ -187,7 +216,6 @@ p <- ggplot(up_dys4, aes(x=Var1,y=Freq)) +
 print(p) 
 dev.off()
 
-library(ggplot2)
 pdf("Dys_DOWN_Barplot2.pdf",height=5,width=5)
 p <- ggplot(down_dys4, aes(x=Var1,y=Freq)) + 
        geom_bar(stat="identity",width = 0.75)+
@@ -221,9 +249,6 @@ dev.off()
 #joined<- join(data, ensembl, by="sample")
 
 #HEATMAP OF DYSREGULATION SCORES
-library(reshape2)
-library(ComplexHeatmap)
-library(circlize)
 
 dysregulation_scores2<- dysregulation_scores[,-c(3,4,5,7)]
 heatdysr<- dcast(dysregulation_scores2, ID~Type)
@@ -311,7 +336,6 @@ dev.off()
 
 
 #####$$$$$$$$$$$$$HEATMAP WITH SCALED SCORES#############$$$$$$$$$$$$$$$$$$$
-library(ComplexHeatmap)
 dysregulation_scores2<- dysregulation_scores[,-c(3,4,5,7)]
 heatdysr<- dcast(dysregulation_scores2, ID~Type)
 rownames(heatdysr)<- heatdysr$ID

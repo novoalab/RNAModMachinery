@@ -9,7 +9,7 @@ Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analy
 ## PART1: Search and extract sets of RNA modification ezymes in selected species across the tree of life
 
 ### FINDING RNA MODIFICATION ENZYMES in a specific SPECIES
-
+Required: HMMER
 ``` 
 find_homologs.sh <pfam_hmm> <fasta_reference_proteome> 
 
@@ -22,12 +22,14 @@ find_homologs.sh <pfam_hmm> <fasta_reference_proteome>
 ### ALIGNING THE ORTHOLOG PROTEINS AND BUILDING PHYLOGENETIC TREE FOR EACH GROUP OF ENZYMES
 
 #### Extract fasta sequences for the proteins of interest in a list of orthologs proteins of a gene group
+Required: perl
 ```
 extract_fasta.sh <uniprot_ID_list>
 
 # Example: extract_fasta.sh A_deamin
 ```
 #### Align protein sequences with MAFFT align 
+Required: mafft
 ```
 mafft.sh <FASTA>
 
@@ -35,6 +37,7 @@ mafft.sh <FASTA>
 ```
 
 #### Build build a phylogenetic tree with iqtree software using 
+Required : iqtree
 ```
 iqtree.sh <MAFFT_OUTPUT>
 
@@ -48,7 +51,7 @@ Initially obtained list of Main RNA Writer Proteins and we added non-catalytic s
 
 #### GTEx 
 Extract TPM values for the RNA modification enzymes from the GTEx TPM dataset
-```[Information on the fractions can be found here](https://github.com/obegik/Oz_Mod_Analysis/blob/master/yeast_rRNA_fractions.md)
+```
 
 Rscript gtex_manipulation.R <GTEX.Expression.File> <ENSEMBL_GeneSymbol_Class.File>
 
@@ -94,16 +97,16 @@ Rscript gtex_vs_encode_similarity.R  <GTEX data> <ENCODE data>
 ### Analysis for the Amniote Orthologs
 
 ``` 
-Rscript kaessman.amniote.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.File>
+Rscript kaessmann.amniote.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.File>
 
-# Example: Rscript kaessman.amniote.R NormalizedRPKM_ConstitutiveExons_Amniote1to1Orthologues.txt human_id_symbol_class.tsv
+# Example: Rscript kaessmann.amniote.R NormalizedRPKM_ConstitutiveExons_Amniote1to1Orthologues.txt human_id_symbol_class.tsv
 ``` 
 
 ### Analysis for the Primate Orthologs
 ``` 
-Rscript kaessman.primate.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.File>
+Rscript kaessmann.primate.R <input.expression.data> <ENSEMBL_GeneSymbol_Class.File>
 
-# Example: Rscript kaessman.primate.R NormalizedRPKM_ConstitutiveExons_Primate1to1Orthologues.txt human_id_symbol_class.tsv
+# Example: Rscript kaessmann.primate.R NormalizedRPKM_ConstitutiveExons_Primate1to1Orthologues.txt human_id_symbol_class.tsv
 ``` 
 
 
@@ -143,9 +146,9 @@ Example:  Rscript cancer_script3_mean_heatmap.R TCGA_GTEX_FINAL.log2.without3can
 ### Calculation of log2FC values for RMPs in tumor/normal pairs and plots
 
 ``` 
-Rscript cancer_script4_log2FC.R <MedianLog Tumor and Normal TPM file>
-
-Example:  Rscript cancer_script4_log2FC.R medianlog_tumor_normal.tpm.tsv
+Rscript cancer_script4_log2FC.R <MedianLog Tumor and Normal TPM file>  <Original TPM File>
+ 
+Example: Rscript cancer_script4_log2FC.R medianlog_tumor_normal.tpm.tsv RMLP.TcgaTargetGtex_rsem_gene_tpm_withheader.tsv
 ``` 
 
 ### Calculation of Dysregulation scores in tumor/normal pairs and plots

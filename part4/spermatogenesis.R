@@ -1,22 +1,54 @@
-###Spermatogenesis
-#library required
-#library(dplyr)
-#library(plyr)
-#=#library(cluster) 
-#library(ggplot2)
-#library(grid)
-#library(gridExtra)
-#library(ComplexHeatmap)
-#library(circlize)
-#library(reshape2)
+###################################################################
+## ANALYSING THE SPERMATOGENESIS DATA (Green et al, 2019)
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
+
+###Requirements
+#libraries: 
+#dplyr
+#plyr
+#cluster
+#ggplot2
+#grid
+#gridExtra
+#ComplexHeatmap
+#circlize
+#reshape2
+####How to use the script
+#Rscript spermatogenesis.R <spermatogenesis.expression.data> <ensembl_file>
+#Rscript spermatogenesis.R spermatogenesis_scRNA_averageexpression.tsv gene_hgnc_ensmus.tsv
 
 
 
-args <- commandArgs(trailingOnly = TRUE)
-input1 <- args[1]#1st variable
+
+
+# 1. Arguments introduced for the execution
+########################################
+
+args <- commandArgs(trailingOnly = TRUE) #Argument for first input
+input1 <- args[1]#1st variable 
+input2 <- args[2] #2nd variable
+
+
+
+# 2. Importing and manipulating the data
+########################################
+
+#Load the library
+library(dplyr)
+library(plyr)
+library(cluster) 
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(ComplexHeatmap)
+library(circlize)
+library(reshape2)
+
+
+
+
 data<-read.delim(input1) #spermatogenesis_scRNA_averageexpression.tsv
-args <- commandArgs(trailingOnly = TRUE)
-input2 <- args[2]#2nd variable #gene_hgnc_ensmus.tsv
 ensembl <- read.table(input2, sep="\t",header=TRUE)#import the ensembl file that contains ENSEMBL ID and matching GeneNames
 library(dplyr)
 library(plyr)
@@ -47,7 +79,10 @@ head(data)
 
 
 
-library(cluster) 
+
+# 3. K means clustering
+########################################
+
 pdf("wss.pdf",height=5,width=5)
 wss <- (nrow(data)-1)*sum(apply(data,2,var))
 for (i in 2:15) wss[i] <- sum(kmeans(data, 
@@ -65,14 +100,17 @@ data_out$cluster <- data2$cluster
 data_out<-data_out[order(data_out$cluster),]
 data_out$symbol<- rownames(data_out)
 data_out$symbol <- factor(data_out$symbol , levels = unique(data_out$symbol))#keep the order of species
-library(ggplot2)
-library(grid)
-library(gridExtra)
 eigs <- data_pca$sdev^2#Calculate percentage for PC values
 percentage<- round(eigs/sum(eigs)*100,2)#Calculate percentage for PC values
 percentage <- paste( colnames(data_out), "(", paste( as.character(percentage), "%", ")", sep="") ) #Calculate percentage for PC values
 
- #PCA Plotting X less label
+
+
+
+
+# 4.  PCA Plotting
+########################################
+
 pdf("pca_spermatogenesis_clustered_less_label.pdf",height=5,width=5.2)
 print(ggplot(data_out,aes(x=PC1,y=PC2,color=cluster,label=symbol))+
      geom_point()+
@@ -147,6 +185,11 @@ dev.off()
 
 
 
+
+# 5. Heatmap
+########################################
+
+
 datah<- data
 datah$symbol<- rownames(data)
 datah2<- join(datah, data_out, by="symbol") #use join function to add a column of gene names/Class corresponding to the ENSEMBL ID to the last column
@@ -154,9 +197,6 @@ datah3<- datah2[,-c(7:11)]
 datah4 <- datah3 %>% select(symbol,cluster, everything())
 datah5<-datah4[order(datah4$cluster),]
 datah6<-datah5[,-c(1:2)] 
-rownames(datah6)<- datah5$symbol
-library(ComplexHeatmap)
-library(circlize)
  pdf("spermatogenesis.heatmap.pdf",height=12,width=8)
  Heatmap(datah6, name = "log(expression)", 
      col = colorRamp2(c(0,0.25,0.5,1,2), c("#2c7bb6","#abd9e9","floralwhite","#fdae61", "#d7191c"),space = "RGB"), 
@@ -181,8 +221,9 @@ library(circlize)
      )
 dev.off()
 
+# 6. Violin Plot
+########################################
 
-library(reshape2)
 datah7<- melt(datah5,c("symbol","cluster"))
 pdf("spermatogenesis.violinplot.pdf",height=5,width=10)
 print(ggplot(datah7, aes(variable, value)) + 
@@ -203,8 +244,9 @@ print(ggplot(datah7, aes(variable, value)) +
 dev.off()
 
 
+# 7. Barplots
+########################################
 
-##Barplot for couple for genes
 data2$symbol<- rownames(data2)
 data3<- melt(data2,c("symbol","cluster"))
 pdf(file="spermatogenesis_barplot.pdf",height=30,width=30)
@@ -225,14 +267,4 @@ print(ggplot(data=data3, aes(x=variable, y=value, fill=variable))+
         facet_wrap(.~symbol,scales="free")
         )
 dev.off()
-
-
-
-
-#Example 
-#Rscript spermatogenesis.R <spermatogenesis.expression.data> <ensembl_file>
-#Rscript spermatogenesis.R spermatogenesis_scRNA_averageexpression.tsv gene_hgnc_ensmus.tsv
-
-
-
 

@@ -1,23 +1,52 @@
-##Requirements
-#library(MASS)
-#library(ggplot2)
-#library(ggrepel)
-#library(ComplexHeatmap)
-#library(circlize)
-#ibrary(ggplot2)
-#ibrary(grid)
-#library(gridExtra)
+###################################################################
+## Tissue-wide expression plots using GTEx values
+## 2020, Oguzhan Begik written for Begik et al, 2020 Genome Biology
+###################################################################
+
+##Required libraries:
+#MASS
+#ggplot2
+#ggrepel
+#ComplexHeatmap
+#circlize
+#ggplot2
+#grid
+#gridExtra
+
+
+#how to use the script
+#Rscript gtex_tissuewide.R RMLP.GTEX.TissueAveraged.TPM.tsv
+
+# 1. Arguments introduced for the execution
+########################################
+
+args <- commandArgs(trailingOnly = TRUE) #Argument for first input
+input1 <- args[1]#1st variable 
+
+
+# 2. Importing and manipulating the data
+########################################
+
+library(MASS)
+library(ggplot2)
+library(ggrepel)
+library(ComplexHeatmap)
+library(circlize)
+library(ggplot2)
+library(grid)
+library(gridExtra)
 
 
 ##Tissue Wide Expression Plots for GTEX
-args <- commandArgs(trailingOnly = TRUE)
-input1 <- args[1]#1st variable
 data<- read.delim(input1)#"RMLP.GTEX.TissueAveraged.TPM.tsv"
-library(reshape2) #for melt function
 scatter<- melt(data, c("Symbol","Class","gene_id")) #data for scatterplot
 colnames(scatter)<- c("Symbol","Class","gene_id","Tissue", "value") #change column names
 scatter$value<- log(scatter$value+1)#Take log of the file (with a pseudocount)
-library(MASS)#for RLM function
+
+
+
+# 3. SCATTER PLOTS
+########################################
 
 #Calculate THRESHOLD for the specificity
 genemean<- aggregate(scatter[, 5], list(scatter$Symbol), mean) #Row mean grouped by Gene
@@ -35,8 +64,6 @@ threshold <- 2.5*sd(res_vec) #The threshold is 2.5 times the standard deviation 
 
 ##Seperate plots and calculations for each tissue
 specific_genes<-vector() 
-library(ggplot2) #for plot 
-library(ggrepel) #to repel the labels overlapping
 for (tissue in unique(scatter2$Tissue)){ #for each tissue
 subset <- scatter2[with(scatter2, scatter2$Tissue %in% tissue),] #extract the data for a specific tissue
 res<- rlm(subset$value ~0 + subset$genemean)#linear model for that tissue 
@@ -65,11 +92,11 @@ dev.off()
 }
 write.table(specific_genes, file="specific_genes_gtex.tsv",quote=FALSE, row.names=FALSE,sep="\t")
 
-#%%%%%%%%%%%%%%% HEATMAP and PCA%%%%%%%%%%%%%%%%%%%%%%%%
-####HEATMAP WITH COMPLEX HEATMAP PACKAGE
-#https://bioconductor.org/packages/release/bioc/vignettes/ComplexHeatmap/inst/doc/s2.single_heatmap.html
-library(ComplexHeatmap)
-library(circlize)
+
+
+# 4. HEATMAP
+########################################
+
 rownames(data)<- data[,1] #assign gene names as rownames  
 data2<- data[,-c(1:3)] #remove the first three columns for the heatmap
 data3<- log(data2+1)#Take log of the file (with a pseudocount)
@@ -101,7 +128,11 @@ Heatmap(data4, name = "z-scale log(TPM)",
 dev.off()
 
 
-##PCA Plotting 
+
+# 4. PCA
+########################################
+
+
 data_pca<-prcomp(data4,center=TRUE) #PCA 
 data_out <- as.data.frame(data_pca$x) #X table of PCA
 data_out$Class<- data$Class
@@ -112,10 +143,8 @@ eigs <- data_pca$sdev^2#Calculate percentage for PC values
 percentage<- round(eigs/sum(eigs)*100,2)#Calculate percentage for PC values
 percentage <- paste( colnames(data_out), "(", paste( as.character(percentage), "%", ")", sep="") ) #Calculate percentage for PC values
 
-library(ggplot2)
-library(grid)
-library(gridExtra)
-## PLOT FOR X ALL LABELS
+
+## PLOT FOR ALL LABELS
 pdf("pca_gtex.all.labels.pdf",height=5,width=7)
 print(ggplot(data_out,aes(x=PC1,y=PC2,color=Class,label=Symbol))+
 	scale_color_manual(values = c("#117A65","#D2B4DE","#F1948A","#B03A2E","#85C1E9","#17202A","#7B7D7D"))+
@@ -137,7 +166,7 @@ print(ggplot(data_out,aes(x=PC1,y=PC2,color=Class,label=Symbol))+
 dev.off()
 
 
-## PLOT FOR X SOME LABELS
+## PLOT FOR SOME LABELS
 pdf("pca_gtex.pdf",height=5,width=7)
 print(ggplot(data_out,aes(x=PC1,y=PC2,color=Class,label=Symbol))+
 	scale_color_manual(values = c("#117A65","#D2B4DE","#F1948A","#B03A2E","#85C1E9","#17202A","#7B7D7D"))+
@@ -211,5 +240,4 @@ print(ggplot(data_out_r,aes(x=PC1,y=PC2,label=Symbol))+
 dev.off()
 
 
-#how to use the script
-#Rscript gtex_tissuewide.R RMLP.GTEX.TissueAveraged.TPM.tsv
+
