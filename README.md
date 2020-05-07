@@ -1,7 +1,7 @@
 # RNA Modification Machinery Analysis
 Scripts used to extract curated lists of RNA modification enzymes and assess their tissue-specificity across multiple species and tissues, as well as cancer and normal tissues, used in the paper:
 
-Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analyses of the RNA modification machinery reveal tissue- and cancer-specific signatures. Genome Biology, May 2020. doi: https://doi.org/10.1101/830968
+Begik O, Lucas MC, Liu H, Ramirez JM, Mattick JS and Novoa EM. Integrative analyses of the RNA modification machinery reveal tissue- and cancer-specific signatures. Genome Biology, May 2020. link: https://rdcu.be/b3Z5I. doi: https://doi.org/10.1186/s13059-020-02009-z
 
 
 ## DATA ACCOMPANYING THIS PAPER CAN BE FOUND [HERE](https://public-docs.crg.es/enovoa/public/website/Begik_RMP2020.html)
